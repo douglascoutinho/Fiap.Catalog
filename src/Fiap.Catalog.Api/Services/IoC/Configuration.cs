@@ -1,7 +1,7 @@
 ﻿using Fiap.Catalog.Domain.Repositories;
 using Fiap.Catalog.Domain.Services.Interface;
 using Fiap.Catalog.Infra.Repositories;
-using MessageProducer.Services;
+using Fiap.Payments.Api.Services.RabbitMQ;
 
 namespace Fiap.Catalog.Api.Services.IoC
 {
@@ -18,8 +18,10 @@ namespace Fiap.Catalog.Api.Services.IoC
 		/// <returns></returns>
 		public static IServiceCollection RegisterDependencies(this IServiceCollection services, IConfiguration configuration)
 		{
+      services.AddHostedService<ConsumerPaymentProcessedEventService>();
+      
       //Interfaces
-      services.AddScoped<IRabbitMQService, RabbitMQService>();
+      services.AddSingleton<IRabbitMQService, PublishService>();
 
       // Repositórios
       services.AddScoped<IJogoRepository, JogoRepository>();

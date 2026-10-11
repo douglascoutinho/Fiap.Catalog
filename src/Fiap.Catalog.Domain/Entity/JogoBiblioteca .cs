@@ -9,6 +9,8 @@
       Id_Usuario = idUsuario;
       Id_Jogo = idJogo;
       Preco = preco;
+      Ativo = true;
+      DataCadastro = DateTime.Now;
     }
 
     public int Id_Usuario { get; private set; }

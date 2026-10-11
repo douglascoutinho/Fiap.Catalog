@@ -46,22 +46,22 @@ namespace Fiap.Catalog.Api.Controllers
     }
 
     /// <summary>
-    /// Inclui um Jogo na Biblioteca
+    /// Realiza um Pedido
     /// </summary>
     /// <param name="dto">Corpo da requisição</param>
     /// <returns></returns>
     /// <response code="200"></response>
     [HttpPost("")]
     [ProducesResponseType(typeof(string), 200)]
-    public IActionResult PostComprar([FromBody] PostBibliotecaRequestDto dto)
+    public async Task<IActionResult> Post([FromBody] PostBibliotecaRequestDto dto)
     {
       var idUsuario = User.ConsultarUsuario();  
 
       var comprar = new JogoBiblioteca(idUsuario: idUsuario, idJogo: dto.Id_Jogo,  preco: dto.Preco);
 
-      _bibliotecaService.Incluir(comprar);
+      await _bibliotecaService.RealizarPedido(comprar);
 
-      return Ok("Compra Solicitada Com Sucesso.");
+      return Ok("Pedido Realizado Com Sucesso.");
     }
   }
 }
