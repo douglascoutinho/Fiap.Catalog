@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-api-deployment
+  labels:
+    app: svc-catalog-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: svc-catalog-api
+  template:
+    metadata:
+      labels:
+        app: svc-catalog-api
+    spec:
+      containers:
+        - name: container-catalog-api
+          image: douglasloc/src-api-catalog:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8082
+          envFrom:
+            - configMapRef:
+                name: configmap-rabbitmq
+            - secretRef:
+                name: catalog-data-base-credentials
+          env:
+            - name: ASPNETCORE_URLS
+              value: "http://+:8082"
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Development"
+            - name: RabbitMQ__Password
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-credentials
+                  key: RABBITMQ_PASSWORD
+          readinessProbe:
+            tcpSocket:
+              port: 8082
+            initialDelaySeconds: 5
+            periodSeconds: 10

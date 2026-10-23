@@ -11,11 +11,21 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 
-var caminhoBancoLocal = Directory.GetCurrentDirectory().Replace("Fiap.Catalog.Api", "Fiap.Catalog.Infra");
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")?.Replace("{AppDir}", $"{caminhoBancoLocal}");
+string? sqliteUrl = Environment.GetEnvironmentVariable("SQLITE_URL");
 
-builder.Services.AddDbContext<Contexto>(options =>
-    options.UseSqlite(connectionString));
+var connectionString = string.Empty;
+
+if (!string.IsNullOrEmpty(sqliteUrl))
+{
+  connectionString = sqliteUrl;
+}
+else
+{
+  var caminhoBancoLocal = Directory.GetCurrentDirectory().Replace("Fiap.Catalog.Api", "Fiap.Catalog.Infra");
+  connectionString = builder.Configuration.GetConnectionString("DefaultConnection")?.Replace("{AppDir}", $"{caminhoBancoLocal}");
+}
+
+builder.Services.AddDbContext<Contexto>(options => options.UseSqlite(connectionString));
 
 
 builder.Services.AddControllers().AddJsonOptions(options =>
