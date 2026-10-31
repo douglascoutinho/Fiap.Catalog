@@ -32,8 +32,9 @@ namespace Fiap.Catalog.Api.Controllers
         userName = _configuration["RabbitMQ:User"],
         password = _configuration["RabbitMQ:Password"],
         virtualHost = _configuration["RabbitMQ:VirtualHost"],
-        sqliteUrl = Environment.GetEnvironmentVariable("SQLITE_URL")
-    };
+        sqliteUrl = Environment.GetEnvironmentVariable("SQLITE_URL"),
+        ambiente = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),
+      };
 
       return Ok(variaveis);
  

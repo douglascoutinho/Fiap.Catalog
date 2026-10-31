@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: svc-catalog-api
+  name: catalog-api
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - port: 8092
       targetPort: 8082
